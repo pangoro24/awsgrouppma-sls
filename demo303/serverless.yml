@@ -1,0 +1,11 @@
+service: demo303
+
+provider:
+    name: aws
+
+plugins:
+  - serverless-lift
+constructs:
+    landing-page:
+        type: single-page-app
+        path: 'mywebsite/build/web'

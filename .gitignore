@@ -21,3 +21,4 @@ var/
 .serverless
 */package-lock.json
 */__pycache__/handler.cpython-38.pyc
+*/mywebsite
