@@ -1,0 +1,45 @@
+service: demo201
+
+plugins:
+  - serverless-plugin-resource-tagging
+  - serverless-deployment-bucket
+  - serverless-prune-plugin
+  - serverless-offline
+custom:
+  prune:
+    automatic: true
+    number: 3
+
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: ${opt:stage}
+  region: us-east-1 
+  memorySize: 512
+  lambdaHashingVersion: 20200924
+  environment:
+    ENV_VAR_1: defaultname
+  deploymentBucket:
+    name: bckt-deployment-${opt:stage}-${self:service}
+    serverSideEncryption: AES256
+  stackName: cfstk-${opt:stage}-${self:service}
+  stackTags:
+    repository: "demo201"
+    project: "awsgroup"
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: public/hello
+          method: post
+
+resources:
+  Outputs:
+    MyLambdaFunctionArn:
+      Description: 'ARN will be stored in a file'
+      Value: !GetAtt HelloLambdaFunction.Arn
+      Export:
+        Name: ${self:service}-${self:provider.stage}-MyLambdaArn
